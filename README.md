@@ -13,7 +13,7 @@ Route::get('apple', [
 ```
 And, then, in your Blade templates, to get a translated text like this: `tt('fruits.apple')` or `tt('es.fruits.apple')`, or get an URL like this: `route('es.apple_path')`.
 
-Also, it is worth to say that this package lets us to maintain, if we want, a **non-prefixed URL for your application's main locale**. So, we can get a clearer URL for our main locale (www.yoursite.com/apple), and prefixed ones for all another supported locales (e.g., www.yoursite.com/fr/apple).
+Also, it is worth to say that this package lets us to maintain, if we want, a **non-prefixed URL for our application's main locale**. So, we can get a clearer URL for our main locale (www.site.com/apple), and prefixed ones for all another supported locales (e.g., www.site.com/fr/apple).
 
 
 ## Installation
