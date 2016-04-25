@@ -18,5 +18,7 @@
         "psr-4": {
             "Translator\\": "src/"
         }
-    }
+    },
+    "version": "1.0.0",
+    "minimum-stability" : "stable"
 }
