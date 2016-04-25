@@ -1,0 +1,22 @@
+{
+    "name": "aewebsolutions/laravel-translator",
+    "description": "Laravel's package for managing multiple locales and translation",
+    "homepage": "https://github.com/aewebsolutions/laravel-translator/",
+    "keywords": ["laravel", "translation", "locale", "router"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Angel Espro",
+            "email": "info@aesolucionesweb.com.ar",
+            "homepage": "http://www.aesolucionesweb.com.ar/"
+        }
+    ],
+    "require": {
+         "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Translator\\": "src/"
+        }
+    }
+}
