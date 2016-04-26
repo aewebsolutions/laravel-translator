@@ -144,6 +144,9 @@ class Localizer implements LocalizerInterface
         $available = $this->config->get('translator.locales_available');
         $alias = $this->config->get('translator.alias_URL');
         
+        if(is_null($available))
+            return $this->available = [];
+        
         foreach($available as $locale){
             $key = array_search( $locale, $alias, true );
             if(!$key)
