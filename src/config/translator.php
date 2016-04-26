@@ -27,7 +27,6 @@ return [
     */
     
     'alias_URL' => [
-        'english' => 'en'
         //'br' => 'pt-br'
         //'uk' => 'en-gb'
     ],
@@ -42,19 +41,19 @@ return [
     | prefixless URLs for main locale.
     */
     
-    'remove_prefix' => false,
+    'remove_prefix' => true,
     
     
     /*
     |--------------------------------------------------------------------------
-    | Redirect to main locale
+    | Redirect to main locale when no prefix is found in URL
     |--------------------------------------------------------------------------
     |
     | When remove_prefix is false and requested url is prefixless, you can force
-    | redirect to main prefixed url version
+    | redirect to main prefixed url version setting true this option.
     */
     
-    'redirect_no_prefix' => false,
+    'redirect_no_prefix' => true,
         
     /*
     |--------------------------------------------------------------------------
