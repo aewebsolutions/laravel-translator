@@ -65,15 +65,15 @@ trait TranslationReceptor
      * If you had written 'apple | apples' in DB, you now can get 'apples' like:
      * Translator::choice('fruts.apple', 4)
      * 
-     * @param string $groupDotNeedle
+     * @param string $localeGroupNeedle
      * @param number $count Number for search for inside intervals
      * @param array $replaceRules E.g., ['name' => 'John']
      * @param string $locale
      * @param bool $orDefault
      * @return mix
      */
-    public function choice($groupDotNeedle, $count = 1, $replacements = false, $locale = NULL, $orDefault = true){
-        $text = $this->text($groupDotNeedle, $replacements, $locale, $orDefault);
+    public function choice($localeGroupNeedle, $count = 1, $replacements = false, $orDefault = true){
+        $text = $this->text($localeGroupNeedle, $replacements, $orDefault);
         $interval = new Interval();
         $interval->decodeStr($text);
         return $interval->search($count);
