@@ -40,7 +40,7 @@ Translator\TranslatorServiceProvider::class,
 ```
 Second, add the facade for RespositoryTranslator to `$aliases` array: 
 ```
-‘Translator‘=> Translator\Facades\TranslatorFacade::class,
+'Translator'=> Translator\Facades\TranslatorFacade::class,
 ```
 ### Publishing
 Some files need be copied from vendor directory.  Just run the following command:
@@ -182,8 +182,8 @@ Updating a text for a specific locale or a group of them, with or without extra 
 ```PHP
 Translator::update('es.fruits.peach', 'melocotón');
 Translator::update('fruits.peach', [
-'es' => 'melocotón',
-'en' => 'peach'
+  'es' => 'melocotón',
+  'en' => 'peach'
 ],[
   'type' => 'information'
 ]);
