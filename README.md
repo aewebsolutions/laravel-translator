@@ -258,10 +258,22 @@ Translator::delete('es.fruits.apple');
 
 Return | Method 
 --- | --- 
-string | text($localeGroupNeedle, $replacements = false, $orDefault = true) <br> Get a text for a locale.group.needle.
-object | texts($groupNeedle) <br> Get all texts for a group.needle.
-string | choice($localeGroupNeedle, $count = 1, $replacements = false, $orDefault = true) <br> Choice between two or more string options.
-Collection | getGroup($name) <br> Get all rows for a group
+string | **text**($localeGroupNeedle, $replacements = [], $orDefault = true) <br> Get a text for a locale.group.needle.
+object | **texts**($groupNeedle) <br> Get all texts for a group.needle.
+string | **choice**($localeGroupNeedle, $count = 1, $replacements = [], $orDefault = true) <br> Choice between two or more string options.
+Collection | **getGroup**($name) <br> Get a Collection from a group name.
+Collection | **getLocale**($locale = NULL, $group = NULL) <br>Get a Collection from a locale and, optionally, a group name.
+void | **cacheFlush**($group = NULL) <br> Remove a group or all groups from cache.
+Collection | **get**($localeGroupNeedle = NULL) <br> Get a Collection from a locale (optionally), a group name and a needle. By default, get current locale.
+void | **delete**($localeGroupNeedle) <br>Delete a whole group or a group.needle for a specific locale or for all locales.
+void | **create**($localeGroupNeedle, $texts, array $extra = []) <br> Insert a text for an specific locale or for all locales at once.
+void | **update**($localeGroupNeedle, $texts, array $extra = []) <br> Edit a text for an specific locale or for all locales at once.
+void | **updateGroupNeedle**($groupNeedle, $newGroupNeedle) <br> Edit the whole group name, edit the needle but not the group or edit a single group.needle row:
+void | **created**(Closure $callback) <br>Register a listener for `created` event. Callback's params: array `$locales`, `$group`, `$needle`.
+void | **updated**(Closure $callback) <br>Register a listener for `updated` event. Callback's params: array `$locales`, `$group`, `$needle`.
+void | **deleted**(Closure $callback) <br>Register a listener for `deleted` event. Callback's params: array `$locales`, `$group`, `$needle`.
+
+
 
 [under construction]
 
