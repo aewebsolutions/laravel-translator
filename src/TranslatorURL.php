@@ -12,7 +12,7 @@ use Closure;
 use Illuminate\Routing\RouteCollection;
 use InvalidArgumentException;
 
-class TranslatorURL extends UrlGenerator //implements TranslatorURLInterface
+class TranslatorURL extends UrlGenerator implements TranslatorURLInterface
 {
     /**
      * Create a new URL Generator instance.
