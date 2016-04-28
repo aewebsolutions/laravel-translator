@@ -22,7 +22,7 @@ trait TranslationReceptor
      * @param string $replaceRules E.g., ['name' => 'John']
      * @param string $locale Locale's code (e.g., "fr"), or "all" for all locales.
      * @param bool $orDefault If there is not text for locale, return main locale
-     * @return mix String or array
+     * @return string
      */
     public function text($localeGroupNeedle, $replacements = false, $orDefault = true){
         $pointer = $this->parseLocaleGroupNeedle($localeGroupNeedle);
