@@ -5,7 +5,7 @@ Extending Laravel's Router and URLGenerator allows us to deal with multiple loca
 
 It is worth to say that, if we want, we can reserve a **non-prefixed URL for our application's main locale**. Thus, from all supported locales, we would have a clearer URL only for our main locale (www.site.com/apple) and prefixed ones for the rest of them (e.g., www.site.com/fr/apple).
 
-To know more about the developer, visite www.aesolucionesweb.com.ar
+To know more about the developer, visit www.aesolucionesweb.com.ar
 
 ## Code Examples
 ```PHP
