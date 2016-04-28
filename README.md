@@ -259,7 +259,7 @@ Translator::delete('es.fruits.apple');
 Return | Method 
 --- | --- 
 string | **text**($localeGroupNeedle, $replacements = [], $orDefault = true) <br> Get a text for a locale.group.needle.
-object | **texts**($groupNeedle) <br> Get all texts for a group.needle.
+object | **texts**($groupNeedle, $replacements = []) <br> Get all texts for a group.needle.
 string | **choice**($localeGroupNeedle, $count = 1, $replacements = [], $orDefault = true) <br> Choice between two or more string options.
 Collection | **getGroup**($name) <br> Get a Collection from a group name.
 Collection | **getLocale**($locale = NULL, $group = NULL) <br>Get a Collection from a locale and, optionally, a group name.
@@ -273,7 +273,17 @@ void | **created**(Closure $callback) <br>Register a listener for `created` even
 void | **updated**(Closure $callback) <br>Register a listener for `updated` event. Callback's params: array `$locales`, `$group`, `$needle`.
 void | **deleted**(Closure $callback) <br>Register a listener for `deleted` event. Callback's params: array `$locales`, `$group`, `$needle`.
 
+### TranslatorURL (Facade: URL)
+TranslatorURL extends URLGenerator.
 
+Return | Method 
+--- | --- 
+string | **route**($name, $parameters = [], $absolute = true, $locale = NULL) <br> Get the URL to a named route (current locale by default).
+object | **routes**($name, $parameters = [], $absolute = true) <br> Get an object with all URLs for all locales to a named route.
+string | **current**($locale = NULL, $absolute = true) <br> Get the current URL for current locale or for another supported locale.
+bool | **hasRouteLocale**($route, $locale) <br> Verify if route has a locale.
+bool | **hasLocale**($routename, $locale) <br> Verify if a route' name has a locale.
+string | **localize**($uri, $locale, $absolute = true, $uriHasPrefix = true) <br> Generate an absolute or relative URL for a given URI and a locale.
 
 [under construction]
 
