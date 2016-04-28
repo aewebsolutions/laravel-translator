@@ -24,11 +24,11 @@ trait TranslationReceptor
      * Get a text from a specified locale.group.needle.
      * 
      * @param string $localeGroupNeedle E.g., "blog.title" or "es.blog.title"
-     * @param string $replaceRules E.g., ['name' => 'John']
+     * @param array $replacements Replacement rules E.g., ['name' => 'John']
      * @param bool $orDefault If there is not text for locale, return main locale
      * @return string
      */
-    public function text($localeGroupNeedle, $replacements = false, $orDefault = true){
+    public function text($localeGroupNeedle, $replacements = [], $orDefault = true){
         $pointer = $this->parseLocaleGroupNeedle($localeGroupNeedle);
         if(!$pointer->needle)
             return NULL; 
@@ -43,7 +43,7 @@ trait TranslationReceptor
             $text = $this->getText($pointer->group, $pointer->needle, $this->localizer->getMainLocale());
         }
         
-        if($replacements)
+        if(count($replacements))
             $text = $this->makeReplacements($text, $replacements);
         
         return $text;
@@ -54,14 +54,24 @@ trait TranslationReceptor
      * as its properties.
      * 
      * @param string $groupDotNeedle E.g., "blog.title"
+     * @param array $replacements Replacement rules. E.g., ['name' => 'John']
      * @return object
      */
-    public function texts($groupDotNeedle){
+    public function texts($groupDotNeedle, $replacements = []){
+        
         $pointer = $this->parseLocaleGroupNeedle($groupDotNeedle);
+        
         if(!$pointer->needle)
             return $this->getObjectLocales();
         
-        return $this->getAllTexts($pointer->group, $pointer->needle);
+        $texts = $this->getAllTexts($pointer->group, $pointer->needle);
+        
+        if(count($replacements))
+            foreach($texts as $locale => $text){
+                $texts->$locale = $this->makeReplacements($text, $replacements);
+            }
+        
+        return $texts;
     }
     
     /**
