@@ -254,7 +254,16 @@ Translator::delete('es.fruits.apple');
 ```
 
 ## Methods
-[Coming soon]
+### TranslatorRespository (Facade: Translator)
+
+Return | Method 
+--- | --- 
+string | text($localeGroupNeedle, $replacements = false, $orDefault = true) <br> Get a text for a locale.group.needle.
+object | texts($groupNeedle) <br> Get all texts for a group.needle.
+string | choice($localeGroupNeedle, $count = 1, $replacements = false, $orDefault = true) <br> Choice between two or more string options.
+Collection | getGroup($name) <br> Get all rows for a group
+
+[under construction]
 
 ## License
 
