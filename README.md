@@ -256,7 +256,7 @@ Translator::delete('es.fruits.apple');
 ## Cache
 In order to reduce database queries, groups should be stored in cache. Just look inside `conf/translator.php` and make sure that `$cache` is set `TRUE`. Laravel Translation uses your application's cache settings.
 
-If you are using (as you should) provided repository to create, update or delete translations, then **cache does not need to be flush manually**. Just be sure that `cache_auto_flush` is set `TRUE` and cache will be automatically flushed only for compromised groups each time a Translator's `created`, `updated` or `deleted` event is fired.
+If you are using (as you should) provided repository to create, update or delete translations, then **cache does not need to be flushed manually**. Just be sure that `cache_auto_flush` is set `TRUE` and cache will be automatically flushed only for compromised groups each time Translator's `created`, `updated` or `deleted` events are fired.
 
 
 ## Methods
