@@ -16,11 +16,10 @@ trait TranslationReceptor
     
     
     /**
-     * Get a text or an array of locale => text for a needle.
+     * Get a text for a locale.group.needle.
      * 
-     * @param string $groupDotNeedle E.g., "blog.title"
+     * @param string $localeGroupNeedle E.g., "blog.title" or "es.blog.title"
      * @param string $replaceRules E.g., ['name' => 'John']
-     * @param string $locale Locale's code (e.g., "fr"), or "all" for all locales.
      * @param bool $orDefault If there is not text for locale, return main locale
      * @return string
      */
