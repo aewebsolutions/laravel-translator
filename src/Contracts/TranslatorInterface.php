@@ -6,7 +6,7 @@ interface TranslatorInterface
 {
     public function text($localeGroupNeedle, $replacements, $orDefault);
     
-    public function texts($localeGroupNeedle);
+    public function texts($localeGroupNeedle, $replacements);
     
     public function choice($localeGroupNeedle, $count, $replacements, $orDefault);
     
