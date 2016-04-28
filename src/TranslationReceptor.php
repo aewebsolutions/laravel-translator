@@ -12,11 +12,16 @@ trait TranslationReceptor
      */
     protected $groups = [];
     
+    /**
+     * Prefix to store groups by cache. 
+     * 
+     * @var string 
+     */
     protected $cachePrefix = 'translator.group.';
     
     
     /**
-     * Get a text for a locale.group.needle.
+     * Get a text from a specified locale.group.needle.
      * 
      * @param string $localeGroupNeedle E.g., "blog.title" or "es.blog.title"
      * @param string $replaceRules E.g., ['name' => 'John']
@@ -93,10 +98,10 @@ trait TranslationReceptor
     }
     
     /**
-     * Get a group of rows
+     * Get a Collection from a group name
      * 
      * @param string $name
-     * @return array
+     * @return Collection
      */
     public function getGroup($name){
         
@@ -118,6 +123,14 @@ trait TranslationReceptor
         return $this->groups[$name];
     }
     
+    /**
+     * Get a Collection from a locale and, optionally, a group name.
+     * Current locale will be asume by default.
+     * 
+     * @param string $locale
+     * @param string $group Group name
+     * @return Collection
+     */ 
     public function getLocale($locale = NULL, $group = NULL){
         If(is_null($locale))
             $locale = \App::getLocale();
@@ -192,8 +205,5 @@ trait TranslationReceptor
             $this->cache->forget($this->cachePrefix.$group->group);
         }
     }
-
-    
-
     
 }
