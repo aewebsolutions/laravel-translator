@@ -253,6 +253,12 @@ Translator::delete('fruits.apple');
 Translator::delete('es.fruits.apple');
 ```
 
+## Cache
+In order to reduce database queries, groups should be stored in cache. Just look inside `conf/translator.php` and make sure that `$cache` is set `TRUE`. Laravel Translation uses your application's cache settings.
+
+If you are using (as you should) provided repository to create, update or delete translations, then **cache does not need to be flush manually**. Just be sure that `cache_auto_flush` is set `TRUE` and cache will be automatically flushed only for compromised groups each time a Translator's `created`, `updated` or `deleted` event is fired.
+
+
 ## Methods
 ### TranslatorRespository (Facade: Translator)
 
@@ -278,16 +284,18 @@ TranslatorURL extends URLGenerator.
 
 Return | Method 
 --- | --- 
-string | **route**($name, $parameters = [], $absolute = true, $locale = NULL) <br> Get the URL to a named route (current locale by default).
+string | **route**($name, $parameters = [], $absolute = true) <br> Get the URL to a named route and locale. Use dot notation. Current locale is get by default.
 object | **routes**($name, $parameters = [], $absolute = true) <br> Get an object with all URLs for all locales to a named route.
-string | **current**($locale = NULL, $absolute = true) <br> Get the current URL for current locale or for another supported locale.
+string | **current**($locale = NULL) <br> Get the current URL for current locale or for another supported locale.
 bool | **hasRouteLocale**($route, $locale) <br> Verify if route has a locale.
 bool | **hasLocale**($routename, $locale) <br> Verify if a route' name has a locale.
 string | **localize**($uri, $locale, $absolute = true, $uriHasPrefix = true) <br> Generate an absolute or relative URL for a given URI and a locale.
 
-[under construction]
 
 ## License
+Laravel Translator is licensed under the [MIT License](http://opensource.org/licenses/MIT).
+
+Copyright 2016 Ángel Espro
 
 
 
