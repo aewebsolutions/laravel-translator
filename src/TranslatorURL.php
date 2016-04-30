@@ -43,10 +43,9 @@ class TranslatorURL extends UrlGenerator implements TranslatorURLInterface
     public function current($locale = NULL, $absolute = true){
         if(is_null($locale) || $locale == $this->localizer->getLocale())
             return $absolute ? $this->to($this->request->getPathInfo()) : $this->request->getPathInfo();
-        
-        $route = $this->request->route();
-        if(!empty($route)){
-            if(in_array($locale, $route->getAction()['locales']))
+
+        if(!empty( $route = $this->request->route())){
+             if($this->hasRouteLocale($route, $locale))
                 return $this->localize($this->request->getPathInfo(), $locale, $absolute);
             return NULL;
         }
