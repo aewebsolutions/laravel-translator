@@ -73,19 +73,33 @@ class TranslatorURL extends UrlGenerator implements TranslatorURLInterface
      * @param  string  $name Syntaxis: locale.routename.
      * @param  mixed   $parameters
      * @param  bool  $absolute
+     * @param  mix  $default Try with main locale (TRUE) or a supported locale
+     * (locale code) if no route is found in first place for specified locale.
      * @return string
      *
      * @throws \InvalidArgumentException
      */
-    public function route($name, $parameters = [], $absolute = true){
+    public function route($name, $parameters = [], $absolute = true, $default = NULL){
         
         $parseName = $this->parseRouteName($name);
         $name = $parseName['name'];
         $locale = $parseName['locale'];
         
         if (!is_null($route = $this->routes->getByName($name))) {
-            if(!$this->hasRouteLocale($route, $locale))
-                return NULL;
+            if(!$this->hasRouteLocale($route, $locale)){
+                if($default){
+                    if($default === true  && $this->hasRouteLocale($route, $this->localizer->getLocale()) ){
+                       $locale = $this->localizer->getLocale(); 
+                    }else if(in_array($default, $this->localizer->getAvailable()) && $this->hasRouteLocale($route, $default)){
+                        $locale = $default;
+                    }else{
+                        return NULL;
+                    }
+                }else{
+                    return NULL;
+                }
+            }
+                
             return $this->toRoute($route, $parameters, $absolute, $locale);
         }
 
