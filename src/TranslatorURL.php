@@ -28,17 +28,44 @@ class TranslatorURL extends UrlGenerator implements TranslatorURLInterface
         $this->localizer = $localizer;
     }
 
-    public function current($locale = NULL)
-    {
-      
-        if(is_null($locale))
-            return $this->to($this->request->getPathInfo());
+/**
+     * Get the current URL for the request. Locale and whether relative or
+     * absolute URL can be specify.
+     * If locale specified is no allowed by current route rule, NULL will be 
+     * returned. However, if current URL has no route (this is, if current is
+     * an error page), a route localizied will be returned. An error page should
+     * be able to be read in any language available.
+     * 
+     * @param string $locale
+     * @param bool $absolute
+     * @return string
+     */
+    public function current($locale = NULL, $absolute = true){
+        if(is_null($locale) || $locale == $this->localizer->getLocale())
+            return $absolute ? $this->to($this->request->getPathInfo()) : $this->request->getPathInfo();
         
-        return $this->localize($this->request->getPathInfo(), $locale);
-        
+        $route = $this->request->route();
+        if(!empty($route)){
+            if(in_array($locale, $route->getAction()['locales']))
+                return $this->localize($this->request->getPathInfo(), $locale, $absolute);
+            return NULL;
+        }
+        return $this->localize($this->request->getPathInfo(), $locale, $absolute);
     }
     
-
+    /**
+     * Get all URLs from all locales available in application.
+     * 
+     * @param type $absolute
+     * @return \stdClass
+     */
+    public function currentAll($absolute = true){
+        $url = new \stdClass();
+        foreach($this->localizer->getAvailable() as $locale){
+            $url->{$locale} = $this->current($locale, $absolute);
+        }
+        return $url;
+    }
     
     /**
      * Get the URL to a named route.
