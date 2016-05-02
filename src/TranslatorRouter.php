@@ -81,7 +81,7 @@ class TranslatorRouter extends Router
             // hidden for this request.
             $uri = md5($uri);
         }
-
+        $uri = rtrim($uri, '/');
         return compact('uri', 'action');
     }
     
