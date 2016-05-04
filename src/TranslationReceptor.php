@@ -120,14 +120,14 @@ trait TranslationReceptor
             
             if( $this->localizer->isCaching() && $this->cache->has( $this->cachePrefix.$name )){
                 
-                $this->groups[$name] = $this->cache->get( $this->cachePrefix.$name , 5);
+                $this->groups[$name] = $this->cache->get( $this->cachePrefix.$name);
               
             } else {
                 
                 $this->groups[$name] = $this->model->where('group', $name)->get();
                 
                 if($this->localizer->isCaching())
-                    $this->cache->put( $this->cachePrefix.$name , $this->groups[$name], 5);
+                    $this->cache->put( $this->cachePrefix.$name , $this->groups[$name], $this->localizer->cacheTimeOut());
             }
         }
         return $this->groups[$name];
