@@ -113,6 +113,15 @@ class Localizer implements LocalizerInterface
     }
     
     /**
+     * Get Cache timeout value
+     * 
+     * @return type
+     */
+    public function cacheTimeOut(){
+        return  $this->config->get('translator.cache_timeout');
+    }
+    
+    /**
      * Replace or add a prefix to given uri.
      * 
      * @param string $uri
