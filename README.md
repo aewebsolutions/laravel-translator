@@ -7,6 +7,8 @@ It is worth to say that, if we want, we can reserve a **non-prefixed URL for our
 
 To know more about the developer, visit www.aesolucionesweb.com.ar
 
+
+
 ## Code Examples
 ```PHP
 //Set a route
@@ -20,19 +22,28 @@ Route::get('apple', [
 route('es.apple_path');
 
 //Get a translated text
-tt('fruits.apple'); 
+echo tt('fruits.apple'); 
+
+//Get a title for current locale
+$article = App\Article::find(1);
+echo $article->title;
 ```
-
-
 
 ## Compatibility
 Laravel 5.*
 
+## Features
+- Routes and urls manager.
+- Complete repository for translate your whole application.
+- Eloquent extension for translate attributes inside your models.
+- Schema support.
+- Cache optimization.
 
 ## Installation
 
 ### Adding repository files to your proyect.
-The best way to install Laravel Translator is with Composer. To install the most recent version, run the following command.
+The best way to install Laravel Translator is with Composer. To install the most 
+recent version, run the following command.
 ```
 composer require aewebsolutions/laravel-translator
 ```
@@ -45,7 +56,13 @@ Translator\TranslatorServiceProvider::class,
 ```
 Second, for a proper access to TranslatorRespository, you must add a new facade to `$aliases` array: 
 ```
-'Translator'=> Translator\Facades\TranslatorFacade::class,
+'Translator' => Translator\Facades\TranslatorFacade::class,
+```
+Optionally, if you wish to use our Schema support for an easily translatable tables creation,
+you need to replace Schema facade. So, comment or remove Laravel's and add the new one:
+```
+//'Schema'    => Illuminate\Support\Facades\Schema::class,
+'Schema'    => Translator\Facades\Schema::class,
 ```
 
 
@@ -61,7 +78,10 @@ This command will publish next files:
 
 
 ### Migration
-A _translations_ table must be created in database.  Running Artisan's `migrate` command would be enough. But if you need to add extra columns to _translations_ table,  you may do it before running command. Just add them to Schema::up in migration file. Also, you may need to add them too to `App\Translation::$fillable`array property.
+A _translations_ table must be created in database.  Running Artisan's `migrate` 
+command would be enough. But if you need to add extra columns to _translations_ table,  
+you may do it before running command. Just add them to Schema::up in migration file. 
+Also, you may need to add them too to `App\Translation::$fillable`array property.
 
 Then, run:
 ```
@@ -102,7 +122,7 @@ Route::get('apple', [
   'uses' => 'fruitsController@apple'
 ]);
 ```
-You can associate, not just a single locale, but a group of them too. Also, if a route is available for all application's supported locales, you can use the ´all´ keyword.
+You can associate, not just a single locale, but a group of them too. Also, if you need a route to be available for the whole group of supported locales, you can use the ´all´ keyword.
 ```PHP
 Route::get('apple', ['locales' => ['en', 'es'] ,  'uses' => 'fruitsController@apple'  ]);
 Route::get('peach', ['locales' => 'all' ,  'uses' => 'fruitsController@peach'  ]);
@@ -137,9 +157,10 @@ To get a relative or absolute URL from a route name for the current locale, as u
 ```PHP
     route('apple_path', ['color' => 'red']);
 ```
-If you ask for another locale, use dot notation.
+If you ask for another locale, use dot notation. For getting a fallback locale's route, pass a locale (or set true) as the four argument.
 ```PHP
     route('es.apple_path', ['color' => 'red'] );
+    route('es.apple_path', ['color' => 'red'], true, 'en' );
 ```
 Also, you can get all URLs for all supported locales. Call either `Route::routes` or `routes` new methods:
 ```PHP
@@ -147,15 +168,15 @@ $url = routes('apple_path', ['color' => 'red'] );
 echo $url->es;
 echo $url->en;
 ```
-Laravel's `URL::current` has been modified. Now, you can pass as an optional parameter a locale.
+Laravel's `URL::current` has been modified. Now, you can pass as an optional first argument a locale.
 ```PHP
 URL::current('es');
 ```
 
 
-### Translations
+### Translator Repository
+Laravel Translator helps you to translate your application easily, dealing with translations from database.
 Translations could be managed directly by `App\Translation` Eloquent model. But, you **should use the provided repository** in order to guarantee stability. `Translator` facade, probably, is all you need. 
-
 
 #### Getting
 You can get a translated text using `Translator::text` method or, better, the `tt`helper. This works like Laravel's `trans`. The `tt` method accepts a locale (optionally), a group name and a needle as its first argument, using dot notation: **locale.group.needle**. Let's assume that current locale is 'en':
@@ -253,6 +274,74 @@ Translator::delete('fruits.apple');
 Translator::delete('es.fruits.apple');
 ```
 
+### Translatable Models
+Laravel Translator includes, not only `Translator` repository, but also an Eloquent extension to manage multiple languajes directly inside your Models. 
+Suppose you need an `Article` model. Would it be truly helpful if you were able to get properties like this:
+
+```PHP
+$article = App\Article::find(1);
+echo $article->title; 
+// output would be 'My title' if locale were 'en', 
+// but 'Mi título' if locale were 'es';
+```
+
+#### Creating a table
+Translatable columns have a clear syntaxis: column_name_locale. In order to simplify creation, optionally you can use our Schema extension (rememeber include facade. See #Installation).
+All you have to do is call `$table->localize(['column_name'])` to multiply `column_name` for each locale available in application. Also, you can pass an array of locales
+as a second argument.
+```PHP
+Schema::create('articles', function ($table) {
+    $table->increments('id');
+    $table->text('body');
+    $table->string('title');
+    $table->timestamps();
+
+    $table->localize([ 'title', 'body' ]);
+});
+```
+
+#### The Model
+Two things must be done: to extend your model to `Translator\Eloquent\Model` and to fill `$translatable` protected property.
+```PHP
+class Article extends Translator\Eloquent\Model
+{
+    protected $translatable = ['title', 'body'];
+
+    protected $fillable = ['title', 'body'];
+
+}
+```
+Now, you can **get** a translatable property like this:
+```PHP
+$article = App\Article::find(1);
+echo $article->title; // output 'My Title'
+
+$title = $article->trans('title');
+echo $title->es; // output 'Mi título
+```
+
+To **update**, **insert** or **fill** a row for current locale, you are able to do it like you usually do.
+But if you need to manage several locales at once, you can do it with an array, just like this:
+```PHP
+//Modify an article
+$article = App\Article::find(1);
+$article->title = [
+    'es' => 'Mi título en español',
+    'en' => 'My Title in English'
+];
+$article->save();
+
+//Insert an article
+$article = new App\Article;
+$article->fill([
+    'title' => [
+        'es' => 'Mi título en español',
+        'en' => 'My Title in English'
+    ]
+]);
+$article->save();
+```
+
 ## Cache
 In order to reduce database queries, groups should be stored in cache. Just look inside `conf/translator.php` and make sure that `$cache` is set `TRUE`. Laravel Translation uses your application's cache settings.
 
@@ -284,9 +373,10 @@ TranslatorURL extends URLGenerator.
 
 Return | Method 
 --- | --- 
-string | **route**($name, $parameters = [], $absolute = true) <br> Get the URL to a named route and locale. Use dot notation. Current locale is get by default.
+string | **route**($name, $parameters = [], $absolute = true, $default = NULL) <br> Get the URL to a named route and locale (current locale, by default). Use dot notation.
 object | **routes**($name, $parameters = [], $absolute = true) <br> Get an object with all URLs for all locales to a named route.
-string | **current**($locale = NULL) <br> Get the current URL for current locale or for another supported locale.
+string | **current**($locale = NULL, $absolute = true) <br> Get the current URL for current locale or for another supported locale.
+array | **currentAll**($absolute = true) <br> Get all current URLs for all locales available.
 bool | **hasRouteLocale**($route, $locale) <br> Verify if route has a locale.
 bool | **hasLocale**($routename, $locale) <br> Verify if a route' name has a locale.
 string | **localize**($uri, $locale, $absolute = true, $uriHasPrefix = true) <br> Generate an absolute or relative URL for a given URI and a locale.
