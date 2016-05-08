@@ -110,7 +110,7 @@ class Model extends Eloquent
     
     /**
      * Take all attributes and parse translatable ones. This method will return
-     * a the attributes array with some changes for uploading or inserting.
+     * a attributes array with some changes for uploading or inserting.
      * 
      * @return array
      */
@@ -147,6 +147,76 @@ class Model extends Eloquent
         return $array;
     }
     
+
+    
+    protected function fillableFromArray(array $attributes)
+    {
+        if (count($this->fillable) > 0 && !static::$unguarded) {
+            //This line has been changed:
+            return array_intersect_key($attributes, array_merge(array_flip($this->fillable), array_flip($this->multiplyTransAttributes())));
+        }
+
+        return $attributes;
+    }
+    
+    protected function multiplyTransAttributes(){
+        $attributes = [];
+        $locales = \App::make('Translator\Localizer')->getAvailable();
+        foreach($this->translatable as $attribute){
+            foreach ($locales as $locale){
+                $attributes[] = $attribute .'_'. $locale;
+            }
+        }
+        return $attributes;
+    }
+    
+    public function isFillable($key)
+    {
+        
+        if (static::$unguarded) {
+            return true;
+        }
+
+        // If the key is in the "fillable" array, we can of course assume that it's
+        // a fillable attribute. Otherwise, we will check the guarded array when
+        // we need to determine if the attribute is black-listed on the model.
+        if (in_array($key, $this->fillable)) {
+            return true;
+        }
+        
+        //This is the only one line that has been changed from original method.
+        if($this->isTranslatableFillable($key)){
+            return true;
+        }
+
+        if ($this->isGuarded($key)) {
+            return false;
+        }
+
+        return empty($this->fillable) && !Str::startsWith($key, '_');
+    }
+    
+    /**
+     * Whether an attribute like attribute_locale has been defined as fillable.
+     * 
+     * @param string $key
+     * @return boolean
+     */
+    public function isTranslatableFillable($key){
+        foreach(\App::make('Translator\Localizer')->getAvailable() as $locale){
+            if(strrchr($key, '_'.$locale) === '_'.$locale){
+               return (in_array(substr ($key, 0, strrpos($key, '_'.$locale)), $this->fillable));
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get all locales's values
+     * 
+     * @param string $key
+     * @return \stdClass
+     */
     public function trans($key){
         $locales = \App::make('Translator\Localizer')->getAvailable();
         $values = new \stdClass();
