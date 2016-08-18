@@ -187,6 +187,9 @@ class Localizer implements LocalizerInterface
         }
         
         \App::setLocale($this->locale);
+        
+        // Set locale for Carbon
+        \Carbon\Carbon::setLocale($this->locale);
     }
     
     /**
