@@ -186,7 +186,7 @@ class TranslatorRepository implements TranslatorInterface
             
             if(!is_array($texts)){
                 $row = $this->model->where('group', $pointer->group)->where('needle', $pointer->needle)->where('locale', $pointer->locale)->first();
-                if(count($row)){
+                if($row->count()){
                     $row->update(array_merge($extra, [
                         'text' => $texts
                     ]));
@@ -199,7 +199,7 @@ class TranslatorRepository implements TranslatorInterface
             foreach($texts as $locale => $text){
 
                 $row = $this->model->where('group', $pointer->group)->where('needle', $pointer->needle)->where('locale', $locale)->first();
-                if(!count($row))
+                if(!$row->count())
                     continue;
 
                 $row->update(array_merge($extra, [
